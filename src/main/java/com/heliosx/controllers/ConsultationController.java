@@ -5,6 +5,7 @@ import com.heliosx.model.ConsultationResultResponse;
 import com.heliosx.model.QuestionsResponse;
 import com.heliosx.model.SubmitAnswersRequest;
 import com.heliosx.services.ConsultationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/med-express-api/v1/consultations")
+@Slf4j
 public class ConsultationController {
 
     private final ConsultationService consultationService;
@@ -30,13 +32,13 @@ public class ConsultationController {
     }
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<ConsultationResultResponse> submitAnswers(
-            @RequestBody SubmitAnswersRequest request) {
+    public ResponseEntity<ConsultationResultResponse> submitAnswers(@RequestBody SubmitAnswersRequest request) {
         validateSubmitRequest(request);
         return ResponseEntity.ok(consultationService.submitAnswers(request));
     }
 
     private void validateSubmitRequest(SubmitAnswersRequest request) {
+        log.info("Validating request: {}", request);
         if (request.getUserId() == null) {
             throw new InvalidRequestException("userId is required");
         }

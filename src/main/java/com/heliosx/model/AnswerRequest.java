@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnswerRequest {
-    private int questionId;
+    private Integer questionId;
     private AnswerType answerType;
     private JsonNode value;
 }

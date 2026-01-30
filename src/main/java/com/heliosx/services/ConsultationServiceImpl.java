@@ -8,6 +8,7 @@ import com.heliosx.model.Question;
 import com.heliosx.model.QuestionsResponse;
 import com.heliosx.model.SubmitAnswersRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ConsultationServiceImpl implements ConsultationService {
     private static final String MESSAGE = "User has had a previous adverse reaction to this medication.";
     private final ConsultationEvaluator evaluator;
@@ -41,20 +43,26 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     @Override
     public QuestionsResponse getQuestions() {
+        log.info("Fetching questions");
         String defaultCondition = "GENOVIAN_PEAR_ALLERGY";
         List<Question> questions = questionBank.getOrDefault(defaultCondition, List.of());
+        log.info("Returning questions");
         return new QuestionsResponse(questions);
     }
 
     @Override
     public ConsultationResultResponse submitAnswers(SubmitAnswersRequest request) {
+        log.info("Submitting answer for userId: {}", request.getUserId());
         UUID consultationId = UUID.randomUUID();
+
         // Evaluate eligibility
+        log.info("Evaluating eligibility for userId: {}", request.getUserId());
         boolean eligible = evaluator.evaluate(request.getAnswers());
         String reason = eligible ? null : MESSAGE;
         ConsultationStatus status = eligible ? ConsultationStatus.PENDING_DOCTOR_REVIEW : ConsultationStatus.AUTO_REJECTED;
 
         // Store consultation
+        log.info("Persisting consultation for userId: {}", request.getUserId());
         Consultation consultation = new Consultation(
                 consultationId,
                 request.getUserId(),
@@ -67,6 +75,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         );
         consultationStore.put(consultationId.toString(), consultation);
 
+        log.info("Returning consultation result for userId: {}", request.getUserId());
         return new ConsultationResultResponse(
                 consultationId,
                 eligible,

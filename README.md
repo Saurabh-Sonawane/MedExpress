@@ -7,6 +7,10 @@
 5. The evaluation logic is simplified to a true/false decision. Real doctor rules or more complex checks are not implemented yet.
 6. Basic validation is in place: if userId is missing or answers are empty, the API returns a 400 Bad Request. It needs more validation to verify userId with persistence layer.
 
+**System Requirement**
+
+For running this application you need Java 17 and above.
+
 **Running the Application**
 
 ```./gradlew bootRun```

@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "e564eefa-0055-43fb-ac22-b9987b20be80",
+		"name": "MedExpress",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "35400996"
+	},
+	"item": [
+		{
+			"name": "Get Questions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/med-express-api/v1/consultations/questions"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit Answer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userId\": \"c0a80101-0000-0000-0000-000000000001\",\n  \"answers\": [\n    { \"questionId\": 1, \"value\": \"25\" },\n    { \"questionId\": 2, \"value\": true }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/med-express-api/v1/consultations/submit-answers"
+			},
+			"response": []
+		}
+	]
+}
